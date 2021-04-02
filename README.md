@@ -32,17 +32,6 @@ Java Class Version: *52 (Java8)*<br>
 |`serversystem.command.permission`|false|Set the permissions of a player|
 |`serversystem.command.vanish`|op|Allow the player to vanish|
 |`serversystem.command.world`|op|Teleoprt player to other teleport player to an other world or edit an other world|
-|`serversystem.rank.admin`|false|Display admin prefix|
-|`serversystem.rank.moderator`|false|Display admin prefix|
-|`serversystem.rank.developer`|false|Display developer prefix|
-|`serversystem.rank.supporter`|false|Display supporter prefix|
-|`serversystem.rank.team`|false|Display team prefix|
-|`serversystem.rank.operator`|op|Display operator prefix|
-|`serversystem.rank.youtuber`|false|Display youtuber prefix|
-|`serversystem.rank.premium`|false|Display premium prefix|
-|`serversystem.rank.player`|true|Display player prefix|
-|`serversystem.tools.commandblock`|false|Allow to use commandblocks|
-|`serversystem.tools.signeddit`|op|Allow to create executable signs|
 
 The rank permissions give the player a colored name and prefix (more information at "Groups").
 
@@ -127,18 +116,20 @@ Groups:
     - serversystem.command.permission
     - serversystem.rank.admin
 ```
-You use colored names with prefix for different groups. You can use this 9 types:
-|Permission|Prefix|Color|
-|---|---|---|
-|`serversystem.rank.admin`|[Admin]|dark_red|
-|`serversystem.rank.moderator`|[Moderator]|dark_blue|
-|`serversystem.rank.developer`|[Developer]|aqua|
-|`serversystem.rank.supporter`|[Supporter]|blue|
-|`serversystem.rank.team`|[Team]|red|
-|`serversystem.rank.operator`|[OP]|red|
-|`serversystem.rank.youtuber`|[YouTuber]|dark_purple|
-|`serversystem.rank.premium`|[Premium]|gold|
-|`serversystem.rank.player`|- |white|
+
+The rank permission is an individual permission set by the ranks. A rank defines the visual representation of a permission.
+
+```json
+Ranks:
+  01RankAdmin:
+    color: dark_red
+    prefix: '[Admin] '
+    permission: serversystem.rank.admin
+```
+
+Make sure you have an empty space after the prefix, otherwise the prefix will be displayed directly in front of the player's name. You can choose any name for the permission as long it is the same as the permission in the groups section. We choose `serversystem.rank.admin`. The name of the rank itself is also unimportant except for the number in front of the name. The number defines the order of the player in the tabbar. The Rank `04RankSupporter` will be displayd below the `01RankAdmin` but above the `06RankPremium` for example.
+
+You can use the colors codes listed in the [Minecraft Wiki](https://minecraft.gamepedia.com/Formatting_codes#Color_codes "Color Codes").
 
 You can add a group to the players in the player section. 
 ```json
@@ -233,6 +224,35 @@ Groups:
     - serversystem.command.permission
     - serversystem.tools.commandblock
     - serversystem.rank.admin
+Ranks:
+  01RankAdmin:
+    color: dark_red
+    prefix: '[Admin] '
+    permission: serversystem.rank.admin
+  02RankModerator:
+    color: dark_blue
+    prefix: '[Moderator] '
+    permission: serversystem.rank.moderator
+  03RankDeveloper:
+    color: aqua
+    prefix: '[Developer] '
+    permission: serversystem.rank.developer
+  04RankSupporter:
+    color: blue
+    prefix: '[Supporter] '
+    permission: serversystem.rank.supporter
+  05RankYouTuber:
+    color: dark_purple
+    prefix: '[YouTuber] '
+    permission: serversystem.rank.youtuber
+  06RankPremium:
+    color: gold
+    prefix: '[Premium] '
+    permission: serversystem.rank.premium
+  07RankPlayer:
+    color: white
+    prefix: ''
+    permission: serversystem.rank.player
 Worlds:
   world:
     exists: true

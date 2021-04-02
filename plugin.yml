@@ -1,0 +1,102 @@
+main: serversystem.main.ServerSystem
+name: ServerSystem
+version: 1.0
+author: Der_Zauberer
+api-version: 1.12
+
+commands:
+  admin:
+    description: Open the admin menu
+    usage: /<command>
+    permission: serversystem.command.admin
+  build:
+    description: Allow the player to build in protected worlds
+    usage: /<command> [<player>]
+    permission: serversystem.command.build
+  enderchest:
+    description: Open the enderchest of a player
+    usage: /<command> [<player>]
+    permission: serversystem.command.enderchest
+  inventory:
+    description: Open the inventory of a player
+    usage: /<command> [<player>]
+    permission: serversystem.command.inventory
+  lobby:
+    description: Teleport player to lobby
+    usage: /<command>
+    permission: serversystem.command.lobby
+  permission:
+    description: Set the permissions of a player
+    usage: /<command> [<player>] [<group>]
+    permission: serversystem.command.permission
+  vanish:
+    description: Allow the player to vanish
+    usage: /<command> [<player>]
+    permission: serversystem.command.vanish
+  world:
+    description: Teleoprt player to an other world or edit an other world
+    usage: /<command> [<word>] [<player>]
+    permission: serversystem.command.world
+  wtp:
+    description: Teleoprt player to an other world
+    usage: /<command> [<word>]
+    permission: serversystem.command.world
+  
+permissions:
+  serversystem.command.admin:
+    description: Open the admin inventory
+    default: op
+  serversystem.command.build:
+    description: Allow the player to build in protected worlds
+    default: op
+  serversystem.command.enderchest:
+    desciption: Open the enderchest of a player
+    default: op
+  serversystem.command.inventory:
+    desciption: Open the inventory of a player
+    default: op
+  serversystem.command.lobby:
+    description: Teleport player to lobby
+    default: true
+  serversystem.command.permission:
+    description: Set the permissions of a player
+    default: false
+  serversystem.command.vanish:
+    description: Allow the player to vanish
+    default: op
+  serversystem.command.world:
+    description: Teleoprt player to other teleoprt player to an other world or edit an other world
+    default: op
+  serversystem.rank.admin:
+    description: Display Admin Prefix
+    default: false
+  serversystem.rank.moderator:
+    description: Display Moderator Prefix
+    default: false
+  serversystem.rank.developer:
+    description: Display Developer Prefix
+    default: false
+  serversystem.rank.supporter:
+    description: Display Supporter Prefix
+    default: false
+  serversystem.rank.team:
+    description: Display Team Prefix
+    default: false
+  serversystem.rank.operator:
+    description: Display Operator Prefix
+    default: op
+  serversystem.rank.youtuber:
+    description: Display YouTuber Prefix
+    default: false
+  serversystem.rank.premium:
+    description: Display Premium Prefix
+    default: false
+  serversystem.rank.player:
+    description: Display Player Prefix
+    default: true
+  serversystem.tools.commandblock:
+    description: Allow to use commandblocks
+    default: false
+  serversystem.tools.signeddit:
+    description: Allow to create executable signs
+    default: op

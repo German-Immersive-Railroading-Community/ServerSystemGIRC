@@ -2,6 +2,7 @@ package serversystem.handler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
 import serversystem.config.Config;
 import serversystem.utilities.WorldGroup;
 
@@ -19,7 +19,8 @@ public class ChatHandler implements Listener {
 	private static ChatColor errorcolor = parseColor(Config.getErrorMessageColor());
 	private static String servername = parseColor(Config.getMessagePrefixColor()) + Config.getMessagePrefix();
 	
-	public static enum ErrorMessage{ONLYCONSOLE, ONLYPLAYER, NOPERMISSION, PLAYERNOTONLINE, WORLDDOESNOTEXIST, NOTENOUGHTARGUMENTS}
+	public static enum ErrorMessage{ONLYCONSOLE, ONLYPLAYER, NOPERMISSION, PLAYERNOTONLINE, WORLDDOESNOTEXIST, NOTENOUGHARGUMENTS}
+	public static enum TitleType{TITLE, SUBTITLE, ACTIONBAR}
 	
 	public static void sendServerMessage(Player player, String message) {
 		player.sendMessage(servername + messagecolor + " " + message);
@@ -39,24 +40,24 @@ public class ChatHandler implements Listener {
 	
 	public static void sendServerErrorMessage(Player player, ErrorMessage errormessage) {
 		switch (errormessage) {
-		case ONLYCONSOLE: player.sendMessage(servername + errorcolor + " " + " This command can only be used by the console!"); break;
-		case ONLYPLAYER: player.sendMessage(servername + errorcolor + " " + " This command can only be used by players!"); break;
-		case NOTENOUGHTARGUMENTS: player.sendMessage(servername + errorcolor + " Not enought arguments!"); break;
+		case ONLYCONSOLE: player.sendMessage(servername + errorcolor + " This command can only be used by the console!"); break;
+		case ONLYPLAYER: player.sendMessage(servername + errorcolor + " This command can only be used by players!"); break;
+		case NOTENOUGHARGUMENTS: player.sendMessage(servername + errorcolor + " Not enough arguments!"); break;
 		case PLAYERNOTONLINE: player.sendMessage(servername + errorcolor + " The player ist not online!"); break;
 		case WORLDDOESNOTEXIST: player.sendMessage(servername + errorcolor + " The world does not exist!"); break;
-		case NOPERMISSION: player.sendMessage(servername + errorcolor + " " + " You have no permission to do that!"); break;
+		case NOPERMISSION: player.sendMessage(servername + errorcolor + " You have no permission to do that!"); break;
 		default: break;
 		}
 	}
 	
 	public static void sendServerErrorMessage(CommandSender sender, ErrorMessage errormessage) {
 		switch (errormessage) {
-		case ONLYCONSOLE: sender.sendMessage(servername + errorcolor + " " + " This command can only be used by the console!"); break;
-		case ONLYPLAYER: sender.sendMessage(servername + errorcolor + " " + " This command can only be used by players!"); break;
-		case NOTENOUGHTARGUMENTS: sender.sendMessage(servername + errorcolor + " Not enought arguments!"); break;
+		case ONLYCONSOLE: sender.sendMessage(servername + errorcolor + " This command can only be used by the console!"); break;
+		case ONLYPLAYER: sender.sendMessage(servername + errorcolor + " This command can only be used by players!"); break;
+		case NOTENOUGHARGUMENTS: sender.sendMessage(servername + errorcolor + " Not enough arguments!"); break;
 		case PLAYERNOTONLINE: sender.sendMessage(servername + errorcolor + " The player ist not online!"); break;
 		case WORLDDOESNOTEXIST: sender.sendMessage(servername + errorcolor + " The world does not exist!"); break;
-		case NOPERMISSION: sender.sendMessage(servername + errorcolor + " " + " You have no permission to do that!"); break;
+		case NOPERMISSION: sender.sendMessage(servername + errorcolor + " You have no permission to do that!"); break;
 		default: break;
 		}
 	}
@@ -83,6 +84,10 @@ public class ChatHandler implements Listener {
 		
 	}
 	
+	public static void sendTitle(Player player, String title, String subtitle) {
+		player.sendTitle(title, subtitle, 10, 100, 10);
+	}
+	
 	public static String getPlayerJoinMessage(PlayerJoinEvent event) {
 		return servername + messagecolor + " " + event.getPlayer().getName() + " joined the game!";
 	}
@@ -107,9 +112,11 @@ public class ChatHandler implements Listener {
 	}
 	
 	public static void sendPlayerPrivateMessage(Player sender, Player receiver, String message) {		
-		sender.sendMessage(TeamHandler.getPlayerNameColor(sender) + sender.getName() + ChatColor.WHITE + " -> " + TeamHandler.getPlayerNameColor(receiver) + "Mir" + ChatColor.WHITE + " :" + ChatColor.GRAY + message);
-		receiver.sendMessage(TeamHandler.getPlayerNameColor(sender) + sender.getPlayer().getName() + ChatColor.WHITE + " -> " + TeamHandler.getPlayerNameColor(receiver) + "Mir" + ChatColor.WHITE + " :" + ChatColor.GRAY + message);
-		Bukkit.getConsoleSender().sendMessage("[Private] " + TeamHandler.getPlayerNameColor(sender) + sender.getPlayer().getName() + ChatColor.WHITE + " -> " + TeamHandler.getPlayerNameColor(receiver) + receiver.getName() + ChatColor.WHITE + " :" + ChatColor.GRAY + message);
+		sender.sendMessage(TeamHandler.getPlayerNameColor(sender) + "Me" + ChatColor.WHITE + " -> " + TeamHandler.getPlayerNameColor(receiver) + receiver.getName() + ChatColor.WHITE + ": " + ChatColor.GRAY + message);
+		if(sender != receiver) {
+			receiver.sendMessage(TeamHandler.getPlayerNameColor(sender) + sender.getPlayer().getName() + ChatColor.WHITE + " -> " + TeamHandler.getPlayerNameColor(receiver) + "Me" + ChatColor.WHITE + ": " + ChatColor.GRAY + message);
+		}
+		Bukkit.getConsoleSender().sendMessage("[Private] " + TeamHandler.getPlayerNameColor(sender) + sender.getPlayer().getName() + ChatColor.WHITE + " -> " + TeamHandler.getPlayerNameColor(receiver) + receiver.getName() + ChatColor.WHITE + ": " + ChatColor.GRAY + message);
 	}
 	
 	public static void sendPlayerTeamMessage(Player player, String message) {
@@ -122,25 +129,23 @@ public class ChatHandler implements Listener {
 	}
 	
 	public static ChatColor parseColor(String color) {
-		switch (color) {
-		case "aqua": return ChatColor.AQUA;
-		case "black": return ChatColor.BLACK;
-		case "blue": return ChatColor.BLUE;
-		case "dark_aqua": return ChatColor.DARK_AQUA;
-		case "dark_blue": return ChatColor.DARK_BLUE;
-		case "dark_gray": return ChatColor.DARK_GRAY;
-		case "dark_green": return ChatColor.DARK_GREEN;
-		case "dark_purple": return ChatColor.DARK_PURPLE;
-		case "dark_red": return ChatColor.DARK_RED;
-		case "gold": return ChatColor.GOLD;
-		case "gray": return ChatColor.GRAY;
-		case "green": return ChatColor.GREEN;
-		case "light_purple": return ChatColor.LIGHT_PURPLE;
-		case "red": return ChatColor.RED;
-		case "white": return ChatColor.WHITE;
-		case "yellow": return ChatColor.YELLOW;
-		default: return ChatColor.WHITE;
+		color = color.toUpperCase();
+		return ChatColor.valueOf(color);
+	}
+	
+	public static Material parseMaterial(String material) {
+		if(material.startsWith("minecraft:")) {
+			material = material.substring(10);
 		}
+		material = material.toUpperCase();
+		return Material.valueOf(material);
+	}
+	
+	public static Boolean parseBoolean(String bool) {
+		if(bool.equalsIgnoreCase("true")) {
+			return true;
+		}
+		return false;
 	}
 	
 	@EventHandler

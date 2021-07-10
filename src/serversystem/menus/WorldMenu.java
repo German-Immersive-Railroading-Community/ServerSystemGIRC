@@ -23,8 +23,8 @@ public class WorldMenu extends PlayerInventory {
 		setItem(13, createBooleanItem("Hunger", Config.hasWorldHunger(world.getName())), (itemstack) -> {setWorldHunger(itemstack, player);});
 		setItem(15, createBooleanItem("Protection", Config.hasWorldProtection(world.getName())), (itemstack) -> {setWorldProtection(itemstack, player);});
 		setItem(17, createBooleanItem("PVP", Config.hasWorldPVP(world.getName())), (itemstack) -> {setWorldPVP(itemstack, player);});
-		setItem(27, createItem(world.getName(), Material.SKULL));
-		setItem(31, createItem("Back", Material.SPECTRAL_ARROW), (itemstack) -> {new WorldsMenu(player).open();});
+		setItem(27, createItem(world.getName(), Material.LAPIS_BLOCK));
+		setItem(31, createItem("Back", Material.ARROW), (itemstack) -> {new WorldsMenu(player).open();});
 		setItem(35, createItem("Teleport to " + world.getName(), Material.ENDER_PEARL), (itemstack) -> {WorldGroupHandler.teleportPlayer(player, world);});
 	}
 	
@@ -37,28 +37,28 @@ public class WorldMenu extends PlayerInventory {
 	
 	private void setWorldExplosion(ItemStack itemstack, Player player) {
 		if(itemstack.equals(createBooleanItem("Explosion", true)) || itemstack.equals(createBooleanItem("Explosion", false))) {
-			setItem(11, createBooleanItem("Explosion", !Config.hasWorldExplosion(player.getWorld().getName())), (itemstack1) -> {setWorldDamage(itemstack, player);});
+			setItem(11, createBooleanItem("Explosion", !Config.hasWorldExplosion(player.getWorld().getName())), (itemstack1) -> {setWorldExplosion(itemstack, player);});
 			Config.setWorldExplosion(player.getWorld().getName(), !Config.hasWorldExplosion(player.getWorld().getName()));
 		}
 	}
 	
 	private void setWorldHunger(ItemStack itemstack, Player player) {
 		if(itemstack.equals(createBooleanItem("Hunger", true)) || itemstack.equals(createBooleanItem("Hunger", false))) {
-			setItem(13, createBooleanItem("Hunger", !Config.hasWorldHunger(player.getWorld().getName())), (itemstack1) -> {setWorldDamage(itemstack, player);});
+			setItem(13, createBooleanItem("Hunger", !Config.hasWorldHunger(player.getWorld().getName())), (itemstack1) -> {setWorldHunger(itemstack, player);});
 			Config.setWorldHunger(player.getWorld().getName(), !Config.hasWorldHunger(player.getWorld().getName()));
 		}
 	}
 	
 	private void setWorldProtection(ItemStack itemstack, Player player) {
 		if(itemstack.equals(createBooleanItem("Protection", true)) || itemstack.equals(createBooleanItem("Protection", false))) {
-			setItem(15, createBooleanItem("Protection", !Config.hasWorldProtection(player.getWorld().getName())), (itemstack1) -> {setWorldDamage(itemstack, player);});
+			setItem(15, createBooleanItem("Protection", !Config.hasWorldProtection(player.getWorld().getName())), (itemstack1) -> {setWorldProtection(itemstack, player);});
 			Config.setWorldProtection(player.getWorld().getName(), !Config.hasWorldProtection(player.getWorld().getName()));
 		}
 	}
 	
 	private void setWorldPVP(ItemStack itemstack, Player player) {
 		if(itemstack.equals(createBooleanItem("PVP", true)) || itemstack.equals(createBooleanItem("PVP", false))) {
-			setItem(17, createBooleanItem("PVP", !Config.hasWorldPVP(player.getWorld().getName())), (itemstack1) -> {setWorldDamage(itemstack, player);});
+			setItem(17, createBooleanItem("PVP", !Config.hasWorldPVP(player.getWorld().getName())), (itemstack1) -> {setWorldPVP(itemstack, player);});
 			Config.setWorldPVP(player.getWorld().getName(), !Config.hasWorldPVP(player.getWorld().getName()));
 		}
 	}

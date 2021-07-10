@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,6 +14,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import serversystem.handler.ChatHandler;
+import serversystem.utilities.ServerWarp;
 import serversystem.utilities.WorldGroup;
 
 public class SaveConfig {
@@ -26,14 +31,58 @@ public class SaveConfig {
 		}
 	}
 	
-	public static ArrayList<String> getSection(String section) {
-		ArrayList<String> list = new ArrayList<>();
-		if(config.getConfigurationSection(section) != null) {
-			for (String key : config.getConfigurationSection(section).getKeys(true)) {
+	public static ArrayList<String> getSection(String section, boolean keys) {
+		try {
+			ArrayList<String> list = new ArrayList<>();
+			for (String key : config.getConfigurationSection(section).getKeys(keys)) {
 				list.add(key);
 			}
+			return list;
+		} catch (NullPointerException exception) {
+			return null;
 		}
-		return list;
+	}
+	
+	public static void setWarp(ServerWarp warp) {
+		config.set("Warps." + warp.getName() + ".material", warp.getMaterial().toString().toLowerCase());
+		config.set("Warps." + warp.getName() + ".location.World", warp.getLocation().getWorld().getName());
+		config.set("Warps." + warp.getName() + ".location.X", warp.getLocation().getX());
+		config.set("Warps." + warp.getName() + ".location.Y", warp.getLocation().getY());
+		config.set("Warps." + warp.getName() + ".location.Z", warp.getLocation().getZ());
+		config.set("Warps." + warp.getName() + ".location.Pitch", warp.getLocation().getPitch());
+		config.set("Warps." + warp.getName() + ".location.Yaw", warp.getLocation().getYaw());
+		config.set("Warps." + warp.getName() + ".global", warp.isGlobal());
+		if(warp.getPermission() != null) {
+			config.set("Warps." + warp.getName() + ".permission", warp.getPermission());
+		} else {
+			config.set("Warps." + warp.getName() + ".permission", null);
+		}
+		saveConfig();
+	}
+	
+	public static void removeWarp(ServerWarp warp) {
+		config.set("Warps." + warp.getName(), null);
+		saveConfig();
+	}
+	
+	public static ServerWarp getWarp(String name) {
+		String path = "Warps." + name + ".location";
+    	Location location = new Location(Bukkit.getWorld(config.getString(path + ".World")), config.getDouble(path +".X"), config.getDouble(path +".Y"), config.getDouble(path +".Z"), (float) config.getDouble(path +".Pitch"), (float) config.getDouble(path +".Yaw"));
+		ServerWarp warp = new ServerWarp(name, ChatHandler.parseMaterial(config.getString("Warps." + name + ".material")), location, config.getBoolean("Warps." + name + ".global"));
+		if(config.getString("Warps." + name + ".permission") != null) {
+			warp.setPermission(config.getString("Warps." + name + ".permission"));
+		}
+		return warp;
+	}
+	
+	public static ArrayList<ServerWarp> getWarps() {
+		ArrayList<ServerWarp> warps = new ArrayList<>();
+		if(getSection("Warps", false) != null) {
+			for(String name : getSection("Warps", false)) {
+				warps.add(getWarp(name));
+			}
+		}
+		return warps;
 	}
 	
 	public static void saveInventory(Player player, WorldGroup worldgroup) {
@@ -45,7 +94,6 @@ public class SaveConfig {
 		for (int i = 0; i < player.getInventory().getContents().length; i++) {
 			config.set(configcontent + "." + i, player.getInventory().getContents()[i]);
 		}
-		player.getInventory().clear();
 		saveConfig();
 	}
 	
@@ -70,8 +118,6 @@ public class SaveConfig {
     public static void saveXp(Player player, WorldGroup worldgroup) {
     	config.set("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Level", player.getLevel());
     	config.set("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience", player.getExp());
-    	player.setLevel(0);
-    	player.setExp(0);
     	saveConfig();
     }
     
@@ -88,10 +134,11 @@ public class SaveConfig {
 		case SPECTATOR: config.set("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode", 3); break;
 		default: config.set("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode", 0); break;
 		}
+    	saveConfig();
     }
     
     public static void loadGamemode(Player player, WorldGroup worldgroup) {
-    	if (getSection("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId()).contains("Gamemode")) {
+    	if (getSection("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId(), true).contains("Gamemode")) {
     		switch (config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode")) {
         	case 0: player.setGameMode(GameMode.SURVIVAL); break;
         	case 1: player.setGameMode(GameMode.CREATIVE); break;
@@ -106,7 +153,6 @@ public class SaveConfig {
     
     public static void saveLocation(Player player) {
     	String path = "Worlds." + player.getWorld().getName() + "." + player.getUniqueId();
-    	config.set(path + ".exists", true);
 		config.set(path +".X", player.getLocation().getX());
 		config.set(path +".Y", player.getLocation().getY());
 		config.set(path +".Z", player.getLocation().getZ());
@@ -117,7 +163,7 @@ public class SaveConfig {
     }
     
     public static Location loadLocation(Player player, World world) {
-    	if(!config.getBoolean("Worlds." + world.getName() + "." + player.getUniqueId() + ".exists")) {
+    	if(config.get("Worlds." + world.getName() + "." + player.getUniqueId()) == null) {
     		return null;
     	}
     	String path = "Worlds." + world.getName() + "." + player.getUniqueId();

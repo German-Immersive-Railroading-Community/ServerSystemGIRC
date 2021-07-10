@@ -4,14 +4,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import serversystem.commands.AdminCommand;
 import serversystem.commands.BuildCommand;
 import serversystem.commands.EnderchestCommand;
 import serversystem.commands.InventoryCommand;
 import serversystem.commands.LobbyCommand;
 import serversystem.commands.PermissionCommand;
+import serversystem.commands.RemoveWarpCommand;
+import serversystem.commands.SetWarpCommand;
 import serversystem.commands.VanishCommand;
 import serversystem.commands.WTPCommand;
+import serversystem.commands.WarpCommand;
 import serversystem.commands.WorldCommand;
 import serversystem.config.Config;
 import serversystem.config.SaveConfig;
@@ -20,8 +25,10 @@ import serversystem.events.EntityDamageListener;
 import serversystem.events.ExplotionListener;
 import serversystem.events.HungerListener;
 import serversystem.events.PlayerDeathListener;
+import serversystem.events.PlayerInteractListener;
 import serversystem.events.PlayerJoinListener;
 import serversystem.events.PlayerQuitListener;
+import serversystem.events.PlayerRespawnListener;
 import serversystem.events.PlayerTeleportListener;
 import serversystem.handler.ChatHandler;
 import serversystem.handler.InventoryHandler;
@@ -29,6 +36,7 @@ import serversystem.handler.PermissionHandler;
 import serversystem.handler.PlayerBuildMode;
 import serversystem.handler.SignHandler;
 import serversystem.handler.TeamHandler;
+import serversystem.handler.WarpHandler;
 import serversystem.handler.WorldGroupHandler;
 import serversystem.signs.WorldSign;
 
@@ -41,9 +49,11 @@ public class ServerSystem extends JavaPlugin{
 		new Config();
 		new SaveConfig();
 		TeamHandler.initializeTeams();
+		WarpHandler.initializeWarps();
 		registerEvents();
 		registerCommands();
 		registerWorldSigns();
+		repeatAutoSave();
 		setInstance(this);
 		for (String world : Config.getLoadWorlds()) {
 			if(Bukkit.getWorld(world) == null) {
@@ -52,9 +62,13 @@ public class ServerSystem extends JavaPlugin{
 		}
 		WorldGroupHandler.autoCreateWorldGroups();
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			PermissionHandler.removeConfigPermissions(player);
-			PermissionHandler.addConfigPermissions(player);
-			PermissionHandler.reloadPlayerPermissions(player);
+			new BukkitRunnable() {
+	            @Override
+	            public void run() {
+	            	PermissionHandler.loadPlayerPermissions(player);
+	            }
+	            
+	        }.runTaskLater(ServerSystem.getInstance(), 100);
 			TeamHandler.addRoleToPlayer(player);
 			if(Config.lobbyExists() && Config.getLobbyWorld() != null) {
 				player.teleport(Config.getLobbyWorld().getSpawnLocation());
@@ -68,14 +82,7 @@ public class ServerSystem extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
-		for(Player player : Bukkit.getOnlinePlayers()) {
-			if(WorldGroupHandler.isEnabled()) {
-				SaveConfig.saveGamemode(player, WorldGroupHandler.getWorldGroup(player));
-				SaveConfig.saveInventory(player, WorldGroupHandler.getWorldGroup(player));
-				SaveConfig.saveXp(player, WorldGroupHandler.getWorldGroup(player));
-			}
-			SaveConfig.saveLocation(player);
-		}
+		WorldGroupHandler.autoSavePlayerStats();
 		TeamHandler.resetTeams();
 	}
 
@@ -85,8 +92,10 @@ public class ServerSystem extends JavaPlugin{
 		Bukkit.getPluginManager().registerEvents(new ExplotionListener(), this);
 		Bukkit.getPluginManager().registerEvents(new HungerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerTeleportListener(), this);
 		
 		Bukkit.getPluginManager().registerEvents(new ChatHandler(), this);
@@ -103,13 +112,25 @@ public class ServerSystem extends JavaPlugin{
 		getCommand("inventory").setExecutor(new InventoryCommand());
 		getCommand("lobby").setExecutor(new LobbyCommand());
 		getCommand("permission").setExecutor(new PermissionCommand());
+		getCommand("removewarp").setExecutor(new RemoveWarpCommand());
+		getCommand("setwarp").setExecutor(new SetWarpCommand());
 		getCommand("vanish").setExecutor(new VanishCommand());
+		getCommand("warp").setExecutor(new WarpCommand());
 		getCommand("world").setExecutor(new WorldCommand());
 		getCommand("wtp").setExecutor(new WTPCommand());
 	}
 	
 	private void registerWorldSigns() {
 		SignHandler.registerServerSign(new WorldSign());
+	}
+	
+	private void repeatAutoSave() {
+	    Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {  
+	        @Override
+	        public void run() {
+	        	WorldGroupHandler.autoSavePlayerStats();
+	        }
+	    }, 1L , (long) 120 * 20);
 	}
 		
 	public static ServerSystem getInstance() {

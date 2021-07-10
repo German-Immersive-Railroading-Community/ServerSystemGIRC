@@ -39,13 +39,11 @@ public class WTPCommand implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		ArrayList<String> commands = new ArrayList<>();
+		commands.clear();
 		if(args.length == 1) {
-			commands.clear();
 			for (World world : Bukkit.getWorlds()) {
 				commands.add(world.getName());
 			}
-		} else {
-			commands.clear();
 		}
 		return commands;
 	}

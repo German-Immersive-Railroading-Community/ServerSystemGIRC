@@ -16,25 +16,21 @@ public class ItemBuilder {
 	private String displayname;
 	private Material material;
 	private List<String> lore;
-	private int custommodeldata;
 	private ItemStack itemstack;
 	
 	public ItemBuilder() {
 		displayname = "Example Soward";
 		material = Material.WOOD_SWORD;
-		custommodeldata = 0;
 	}
 	
 	public ItemBuilder(Material material) {
 		displayname = "Example Soward";
 		this.material = material;
-		custommodeldata = 0;
 	}
 	
 	public ItemBuilder(String displayname) {
 		this.displayname = displayname;
 		material = Material.WOOD_SWORD;
-		custommodeldata = 0;
 	}
 	
 	public ItemBuilder(String displayname, Material material) {
@@ -66,14 +62,6 @@ public class ItemBuilder {
 		return lore;
 	}
 	
-	public void setCustomModelData(int costummodeldata) {
-		this.custommodeldata = costummodeldata;
-	}
-	
-	public int getCustommodeldata() {
-		return custommodeldata;
-	}
-	
 	public void addPotionMeta(Color color, PotionEffect potioneffect) {
 		if(itemstack != null && material == Material.POTION) {
 			PotionMeta potionmeta = (PotionMeta) itemstack.getItemMeta();
@@ -92,15 +80,18 @@ public class ItemBuilder {
 	}
 	
 	public ItemStack buildItem() {
-		ItemStack itemstack = new ItemStack(material);
+		itemstack = new ItemStack(material);
+		buildItem(itemstack);
+		return itemstack;
+	}
+	
+	public void buildItem(ItemStack itemstack) {
 		ItemMeta itemmeta = itemstack.getItemMeta();
 		itemmeta.setDisplayName(ChatColor.RESET + displayname);
 		if(lore != null) {
 			itemmeta.setLore(lore);
 		}
 		itemstack.setItemMeta(itemmeta);
-		this.itemstack = itemstack;
-		return itemstack;
 	}
 	
 	public ItemMeta getItemMeta() {

@@ -47,9 +47,9 @@ public class PlayerInventory {
 	public static ItemStack createBooleanItem(String name, boolean defaults) {
 		ItemBuilder itembuilder;
 		if(defaults) {
-			itembuilder = new ItemBuilder(name + " true", Material.GREEN_GLAZED_TERRACOTTA);
+			itembuilder = new ItemBuilder(name + " true", Material.GREEN_SHULKER_BOX);
 		} else {
-			itembuilder = new ItemBuilder(name + " false", Material.RED_GLAZED_TERRACOTTA);
+			itembuilder = new ItemBuilder(name + " false", Material.RED_SHULKER_BOX);
 		}
 		return itembuilder.buildItem();
 	}
@@ -97,6 +97,15 @@ public class PlayerInventory {
 	
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	public static int calculateSize(int slots) {
+		int difference = 9 - (slots % 9);
+		int size = slots + difference;
+		if(size > 54) {
+			size = 54;
+		}
+		return size;
 	}
 	
 }

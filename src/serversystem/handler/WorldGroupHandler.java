@@ -1,6 +1,8 @@
 package serversystem.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -14,6 +16,8 @@ public class WorldGroupHandler {
 	public enum WorldSetting{DAMAGE, EXPLOSION, HUNGER, PROTECTION, PVP}
 	private static ArrayList<WorldGroup> worldgroups = new ArrayList<>();
 	private static boolean enabled = Config.isWorldGroupSystemEnabled();
+	
+	public static HashMap<Player, World> playerdeaths = new HashMap<>();
 	
 	public static void autoCreateWorldGroups() {
 		for (World world : Bukkit.getWorlds()) {
@@ -56,6 +60,17 @@ public class WorldGroupHandler {
 		}
 	}
 	
+	public static void autoSavePlayerStats() {
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			if(enabled) {
+				SaveConfig.saveGamemode(player, WorldGroupHandler.getWorldGroup(player));
+				SaveConfig.saveInventory(player, WorldGroupHandler.getWorldGroup(player));
+				SaveConfig.saveXp(player, WorldGroupHandler.getWorldGroup(player));
+			}
+			SaveConfig.saveLocation(player);
+		}
+	}
+	
 	public static WorldGroup getWorldGroup(Player player) {
 		for(WorldGroup worldgroup : worldgroups) {
 			if(worldgroup.getWorlds().contains(player.getWorld())) {
@@ -95,7 +110,7 @@ public class WorldGroupHandler {
 		Bukkit.getWorlds().add(new WorldCreator(name).createWorld());
 		World world = Bukkit.getWorld(name);
 		Config.addWorld(world.getName());
-		Config.addLoadWorld(world.getName());
+		Config.addToLoadWorld(world.getName());
 		WorldGroupHandler.addWorldGroup(new WorldGroup(world.getName(), world));
 	}
 	
@@ -103,16 +118,16 @@ public class WorldGroupHandler {
 		Bukkit.getWorlds().add(new WorldCreator(name).createWorld());
 		World world = Bukkit.getWorld(name);
 		Config.addWorld(world.getName());
-		Config.addLoadWorld(world.getName());
+		Config.addToLoadWorld(world.getName());
 		worldgroup.addWorld(world);
 	}
 	
 	public static void removeWorld(String world) {
-		Config.removeLoadWorld(world);
+		Config.removeFromLoadWorld(world);
 	}
 	
 	public static void removeWorld(World world) {
-		Config.removeLoadWorld(world.getName());
+		Config.removeFromLoadWorld(world.getName());
 	}
 	
 	public static ArrayList<WorldGroup> getWorldgroups() {

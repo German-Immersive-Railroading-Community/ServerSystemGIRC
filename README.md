@@ -30,18 +30,11 @@ Java Class Version: *52 (Java8)*<br>
 |inventory|`/inventory [<player>]`|`serversystem.command.inventory`|false|Open the inventory of a player|
 |lobby|`/lobby`|`serversystem.command.lobby`|true|Teleport player to lobby|
 |permission|`/permission [<player>] [<group>]`|`serversystem.command.permission`|false|Set the permissions of a player|
-|setwarp|`/setwarp [name] [<item>] [<global>] [permission]`|`serversystem.command.setwarp`|false|Set a warp location|
-|removewarp|`/removewarp [<warp>]`|`serversystem.command.removewarp`|false|Remove a warp location|
 |vanish|`/vanish [<player>]`|`serversystem.command.vanish`|false|Allow the player to vanish|
-<<<<<<< HEAD
 |warp|`[/warp <warp>] [<action>] [<option>] [value]`|`serversystem.command.warp` `serversystem.command.warp.edit`|true|Teleport player to a location|
 |world|`/world [<world>] [<action>] [<option>] [value]`|`serversystem.command.world` `serversystem.command.world.edit`|false|Teleport player to an other world or edit an other world|
 
 The commands `world` and `warp` can be used to teleport with `serversystem.command.world` and `serversystem.command.warp`. The edit the warps and worlds use the same command, but with the permissions `serversystem.command.world` and `serversystem.command.warp`.
-=======
-|warp|`/warp [<warp>]`|`serversystem.command.warp`|true|Teleport player to a location|
-|world|`/world [action] [<world>] [<player] /world [action] [<world>] [action] [boolean]`|`serversystem.command.world`|false|Teleport player to an other world or edit an other world|
->>>>>>> branch 'master' of https://github.com/German-Immersive-Railroading-Community/ServerSystemGIRC
 
 ## Permissions
 |Permission|Default|Description|
@@ -52,8 +45,6 @@ The commands `world` and `warp` can be used to teleport with `serversystem.comma
 |`serversystem.command.inventory`|op|Open the inventory of a player|
 |`serversystem.command.lobby`|true|Teleport player to lobby|
 |`serversystem.command.permission`|false|Set the permissions of a player|
-|`serversystem.command.setwarp`|op|Set a warp location|
-|`serversystem.command.removewarp`|op|Remove a warp location|
 |`serversystem.command.vanish`|op|Allow the player to vanish|
 |`serversystem.command.warp`|op|Teleport player to a location|
 |`serversystem.command.world`|op|Teleoprt player to other teleport player to an other world or edit an other world|
@@ -119,11 +110,7 @@ hogwarts:
 In this example world and world_nether are in the same worldgroup while the world hogwarts has his own separated worldgroup.
 
 ### Disable commands and default permissions
-<<<<<<< HEAD
 You can disable permissions simply by adding the permission to the list. For example, you can disable minecraft default commands by adding its permission. Disabled permissions will be removed for each group, even they would get the permission, disabled permissions are overwriting the group permissions! Permissions can't be shortet by using a `*`!
-=======
-You can disable permissions simply by adding the permission to the list. For example, you can disable minecraft default commands by adding its permission.
->>>>>>> branch 'master' of https://github.com/German-Immersive-Railroading-Community/ServerSystemGIRC
 
 ```json
 DisabledPermissions:
@@ -154,12 +141,8 @@ Groups:
     prefix: '[Moderator] '  
     permissions:
     - serversystem.command.permission
-<<<<<<< HEAD
     - minecraft.command.*`
     - -bukkit.command.*
-=======
-    - minecraft.command.*
->>>>>>> branch 'master' of https://github.com/German-Immersive-Railroading-Community/ServerSystemGIRC
   admin:
     id: 01RankAdmin
     color: dark_red
@@ -171,11 +154,8 @@ Groups:
     - bukkit.command.*
 ```
 
-<<<<<<< HEAD
 Permissions can be shorted with `*` at the end of the string, which means that all permissions will be added, which starts with this prefix. Permissions can also be removed by adding a `-` at the beginning of the string!
 
-=======
->>>>>>> branch 'master' of https://github.com/German-Immersive-Railroading-Community/ServerSystemGIRC
 The id of the group is unimportant except for the number in front of the name. The number defines the order of the player in the tabbar. The Rank `04RankSupporter` will be displayed below the `01RankAdmin` but above the `06RankPremium` for example. Make sure you have an empty space after the prefix, otherwise the prefix will be displayed directly in front of the player's name. You can find an example for the tabbar at the end of the document as image.
 
 You can use the colors codes listed in the [Minecraft Wiki](https://minecraft.gamepedia.com/Formatting_codes#Color_codes "Color Codes").

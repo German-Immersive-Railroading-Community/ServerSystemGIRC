@@ -68,7 +68,9 @@ public class SaveConfig {
 	public static ServerWarp getWarp(String name) {
 		String path = "Warps." + name + ".location";
     	Location location = new Location(Bukkit.getWorld(config.getString(path + ".World")), config.getDouble(path +".X"), config.getDouble(path +".Y"), config.getDouble(path +".Z"), (float) config.getDouble(path +".Pitch"), (float) config.getDouble(path +".Yaw"));
-		ServerWarp warp = new ServerWarp(name, ChatHandler.parseMaterial(config.getString("Warps." + name + ".material")), location, config.getBoolean("Warps." + name + ".global"));
+		ServerWarp warp = new ServerWarp(name, location);
+		warp.setMaterial(ChatHandler.parseMaterial(config.getString("Warps." + name + ".material")));
+		warp.setGlobal(config.getBoolean("Warps." + name + ".global"));
 		if(config.getString("Warps." + name + ".permission") != null) {
 			warp.setPermission(config.getString("Warps." + name + ".permission"));
 		}

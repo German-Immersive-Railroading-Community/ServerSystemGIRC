@@ -18,30 +18,40 @@ public class TeamHandler {
 		if(Config.getSection("Groups", false) != null) {
 			for (String group : Config.getSection("Groups", false)) {
 				if(Config.getGroupID(group) != null && Config.getGroupColor(group) != null && Config.getGroupPrefix(group) != null) {
-					createTeam(Config.getGroupID(group), Config.getGroupPrefix(group), ChatHandler.parseColor(Config.getGroupColor(group)));
+					createTeam(Config.getGroupID(group), ChatHandler.parseColor(Config.getGroupColor(group)) + Config.getGroupPrefix(group), ChatHandler.parseColor(Config.getGroupColor(group)));
 				}
 			}
 		}
-		createTeam(TEAMVANISH, "[VANISH] ", ChatColor.GRAY);
+		createTeam(TEAMVANISH, ChatColor.GRAY + "[VANISH] ", ChatColor.GRAY);
+		groups.add(TEAMVANISH);
 	}
 	
 	public static void resetTeams() {
 		for (String group : groups) {
-			removeTeam(group);
+			if(getMainScoreboard().getTeam(group) != null) {
+				resetTeam(group);
+			}
 		}
-		removeTeam(TEAMVANISH);
+		groups.clear();
 	}
 	
 	public static void createTeam(String name, String prefix, ChatColor color) {
 		if (getMainScoreboard().getTeam(name) == null) {
 			getMainScoreboard().registerNewTeam(name).setPrefix(prefix);
 			getMainScoreboard().getTeam(name).setColor(color);
+			groups.add(name);
 		}
 	}
 	
 	public static void removeTeam(String team) {
 		getMainScoreboard().getTeam(team).unregister();
+		groups.remove(team);
 	}
+	
+	private static void resetTeam(String team) {
+		getMainScoreboard().getTeam(team).unregister();
+	}
+	
 	
 	public static void addPlayerToTeam(String team, String player) {
 		getMainScoreboard().getTeam(team).addEntry(player);

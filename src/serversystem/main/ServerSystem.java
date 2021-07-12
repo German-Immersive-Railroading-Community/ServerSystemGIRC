@@ -5,15 +5,12 @@ import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import serversystem.commands.AdminCommand;
 import serversystem.commands.BuildCommand;
 import serversystem.commands.EnderchestCommand;
 import serversystem.commands.InventoryCommand;
 import serversystem.commands.LobbyCommand;
 import serversystem.commands.PermissionCommand;
-import serversystem.commands.RemoveWarpCommand;
-import serversystem.commands.SetWarpCommand;
 import serversystem.commands.VanishCommand;
 import serversystem.commands.WTPCommand;
 import serversystem.commands.WarpCommand;
@@ -112,8 +109,6 @@ public class ServerSystem extends JavaPlugin{
 		getCommand("inventory").setExecutor(new InventoryCommand());
 		getCommand("lobby").setExecutor(new LobbyCommand());
 		getCommand("permission").setExecutor(new PermissionCommand());
-		getCommand("removewarp").setExecutor(new RemoveWarpCommand());
-		getCommand("setwarp").setExecutor(new SetWarpCommand());
 		getCommand("vanish").setExecutor(new VanishCommand());
 		getCommand("warp").setExecutor(new WarpCommand());
 		getCommand("world").setExecutor(new WorldCommand());

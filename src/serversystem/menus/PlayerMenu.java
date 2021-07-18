@@ -23,7 +23,7 @@ public class PlayerMenu extends PlayerInventory {
 		setItem(13, createPotionItem("Effect Jump Boost", Color.GREEN, PotionEffectType.JUMP), (itemstack) -> {addPotionEffect(target, PotionEffectType.JUMP);});
 		setItem(15, createItem("Remove Effects", Material.GLASS_BOTTLE), (itemstack) -> {removeEffects(player);});
 		setItem(17, createItem("Kill Player", Material.DIAMOND_SWORD), (itemstack) -> {target.setHealth(0);});
-		setItem(27, createItem(player.getName(), Material.REDSTONE_BLOCK));
+		setItem(27, createItem(target.getName(), Material.REDSTONE_BLOCK));
 		setItem(31, createItem("Back", Material.ARROW), (itemstack) -> {player.closeInventory(); new PlayersMenu(player).open();}); 
 		setItem(35, createItem("Teleport to " + target.getName(), Material.ENDER_PEARL), (itemstack) -> {player.teleport(target);});
 	}

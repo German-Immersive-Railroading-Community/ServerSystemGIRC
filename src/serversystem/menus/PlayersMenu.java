@@ -16,7 +16,7 @@ public class PlayersMenu extends PlayerInventory {
 		setItem(calculateSize(Bukkit.getOnlinePlayers().size() + 9) - 5, createItem("Back", Material.ARROW), (itemstack) -> {new AdminMenu(player).open();});
 		for (Player players : Bukkit.getOnlinePlayers()) {
 			if(i < 45) {
-				setItem(i, createItem(player.getName(), Material.REDSTONE_BLOCK), (itemstack) -> {setPlayer(itemstack, player, players);});
+				setItem(i, createItem(players.getName(), Material.REDSTONE_BLOCK), (itemstack) -> {setPlayer(itemstack, player, players);});
 				i++;
 			} else {
 				return;

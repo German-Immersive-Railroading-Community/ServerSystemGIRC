@@ -31,9 +31,7 @@ private static ArrayList<PlayerInventory> playerinventory = new ArrayList<>();
 						event.setCancelled(true);
 					}
 				}
-			} catch (ConcurrentModificationException exception) {
-				exception.printStackTrace();
-			}
+			} catch (ConcurrentModificationException exception) {}
 		}
 	}
 

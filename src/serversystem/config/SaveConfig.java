@@ -103,18 +103,24 @@ public class SaveConfig {
     	String configarmor = "WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Inventory.Armor";
     	String configcontent = "WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Inventory.Content";
     	player.getInventory().clear();
-    	ItemStack[] content = new ItemStack[4];
-        for (int i = 0; i < 4; i++) {
-        	if(config.getItemStack(configarmor + "." + i) != null) {
-        		content[i] = config.getItemStack(configarmor + "." + i);
+    	ItemStack[] content;
+    	if(config.get(configarmor) != null) {
+    		content = new ItemStack[4];
+            for (int i = 0; i < 4; i++) {
+            	if(config.getItemStack(configarmor + "." + i) != null) {
+            		content[i] = config.getItemStack(configarmor + "." + i);
+            	}
         	}
+            player.getInventory().setArmorContents(content);
     	}
-        player.getInventory().setArmorContents(content);
-        content = new ItemStack[41];
-        for (int i = 0; i < 41; i++) {
-    		content[i] = config.getItemStack(configcontent + "." + i);
+    	
+    	if(config.get(configcontent) != null) {
+    		content = new ItemStack[41];
+            for (int i = 0; i < 41; i++) {
+        		content[i] = config.getItemStack(configcontent + "." + i);
+        	}
+            player.getInventory().setContents(content);
     	}
-        player.getInventory().setContents(content);	
 	}
     
     public static void saveXp(Player player, WorldGroup worldgroup) {
@@ -124,8 +130,12 @@ public class SaveConfig {
     }
     
     public static void loadXp(Player player, WorldGroup worldgroup) {
-    	player.setLevel(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Level"));
-    	player.setExp(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience"));
+    	if (config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Level") != null) {
+    		player.setLevel(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Level"));
+    	}
+    	if(config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience") != null) {
+    		player.setExp(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience"));
+    	}
     }
     
     public static void saveGamemode(Player player, WorldGroup worldgroup) {
@@ -140,7 +150,7 @@ public class SaveConfig {
     }
     
     public static void loadGamemode(Player player, WorldGroup worldgroup) {
-    	if (getSection("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId(), true).contains("Gamemode")) {
+    	if (config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode") != null) {
     		switch (config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode")) {
         	case 0: player.setGameMode(GameMode.SURVIVAL); break;
         	case 1: player.setGameMode(GameMode.CREATIVE); break;

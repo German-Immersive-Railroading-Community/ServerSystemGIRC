@@ -5,9 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
 import serversystem.config.Config;
 import serversystem.config.SaveConfig;
-import serversystem.handler.PlayerVanish;
+import serversystem.handler.ChatHandler;
+import serversystem.handler.PlayerVanishHandler;
 import serversystem.handler.WorldGroupHandler;
 
 public class PlayerTeleportListener implements Listener {
@@ -17,9 +20,17 @@ public class PlayerTeleportListener implements Listener {
 		Player player = event.getPlayer();
 		World world = event.getTo().getWorld();
 		if(event.getPlayer().getWorld() != event.getTo().getWorld()) {
-			boolean vanished = PlayerVanish.isPlayerVanished(event.getPlayer());
-			if(!Config.hasWorldSpawn(event.getPlayer().getWorld().getName())) {
-				SaveConfig.saveLocation(event.getPlayer());
+			boolean vanished = PlayerVanishHandler.isPlayerVanished(event.getPlayer());
+			if(event.getCause() == TeleportCause.NETHER_PORTAL || event.getCause() == TeleportCause.END_PORTAL) {
+				if(!Config.arePortalsEnabled()) {
+					ChatHandler.sendServerErrorMessage(event.getPlayer(), "Portals are not enabled on this server!");
+					event.setCancelled(true);
+					return;
+				}
+			} else {
+				if(!Config.hasWorldSpawn(event.getPlayer().getWorld().getName())) {
+					SaveConfig.saveLocation(event.getPlayer());
+				}
 			}
 			if(Config.isWorldGroupSystemEnabled()) {
 				WorldGroupHandler.getWorldGroup(player).onPlayerLeave(event.getPlayer());
@@ -35,7 +46,7 @@ public class PlayerTeleportListener implements Listener {
 				}
 			}
 			if(vanished) {
-				PlayerVanish.vanishPlayer(event.getPlayer());
+				PlayerVanishHandler.vanishPlayer(event.getPlayer());
 			}
 		}
 	}

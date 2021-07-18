@@ -127,16 +127,26 @@ public class ChatHandler implements Listener {
 	}
 	
 	public static ChatColor parseColor(String color) {
-		color = color.toUpperCase();
-		return ChatColor.valueOf(color);
+		try {
+			color = color.toUpperCase();
+			return ChatColor.valueOf(color);
+		} catch (IllegalArgumentException exception) {
+			return ChatColor.WHITE;
+		}
+		
 	}
 	
 	public static Material parseMaterial(String material) {
-		if(material.startsWith("minecraft:")) {
-			material = material.substring(10);
+		try {
+			if(material.startsWith("minecraft:")) {
+				material = material.substring(10);
+			}
+			material = material.toUpperCase();
+			return Material.valueOf(material);
+		} catch (Exception e) {
+			return Material.BARRIER;
 		}
-		material = material.toUpperCase();
-		return Material.valueOf(material);
+		
 	}
 	
 	public static WorldOption parseWorldOption(String option) {

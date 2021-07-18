@@ -28,11 +28,14 @@ public class PermissionHandler implements Listener {
 			removeConfigDisablePermissions(player);
 			for(String string : Config.getPlayerPermissions(player)) {
 				if(string.endsWith("*")) {
+					
 					string = string.substring(0, string.length() - 2);
 					boolean add = true;
 					if(string.startsWith("-")) {
 						add = false;
 						string = string.substring(1);
+					} else {
+						addPermission(player, string + "*");
 					}
 					for (Permission permission : Bukkit.getServer().getPluginManager().getPermissions()) {
 						if(permission.getName().startsWith(string)) {

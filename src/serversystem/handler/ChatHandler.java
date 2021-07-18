@@ -143,7 +143,7 @@ public class ChatHandler implements Listener {
 			}
 			material = material.toUpperCase();
 			return Material.valueOf(material);
-		} catch (Exception e) {
+		} catch (IllegalArgumentException exception) {
 			return Material.BARRIER;
 		}
 		

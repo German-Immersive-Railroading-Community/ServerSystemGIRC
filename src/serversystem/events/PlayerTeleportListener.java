@@ -1,12 +1,13 @@
 package serversystem.events;
 
+import java.util.HashMap;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
 import serversystem.config.Config;
 import serversystem.config.SaveConfig;
 import serversystem.handler.ChatHandler;
@@ -14,6 +15,8 @@ import serversystem.handler.PlayerVanishHandler;
 import serversystem.handler.WorldGroupHandler;
 
 public class PlayerTeleportListener implements Listener {
+	
+	public static HashMap<Player, Location> locations = new HashMap<>();
 	
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent event) {
@@ -48,6 +51,9 @@ public class PlayerTeleportListener implements Listener {
 			if(vanished) {
 				PlayerVanishHandler.vanishPlayer(event.getPlayer());
 			}
+		}
+		if(!event.isCancelled()) {
+			locations.put(player, event.getFrom());
 		}
 	}
 

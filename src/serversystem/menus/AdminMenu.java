@@ -21,9 +21,9 @@ public class AdminMenu extends PlayerInventory {
 		setItem(11, createItem("Time Day", Material.WATCH), (itemstack) -> {player.getWorld().setTime(6000);});
 		setItem(20, createItem("Time Night", Material.WATCH), (itemstack) -> {player.getWorld().setTime(13000);});
 		setItem(29, createItem("Time Midnight", Material.WATCH), (itemstack) -> {player.getWorld().setTime(18000);});
-		setItem(4, createPotionItem("Effect Speed", Color.BLUE, PotionEffectType.SPEED), (itemstack) -> {addPtionEffect(player, PotionEffectType.SPEED);});
-		setItem(13, createPotionItem("Effect Jump Boost", Color.GREEN, PotionEffectType.JUMP), (itemstack) -> {addPtionEffect(player, PotionEffectType.JUMP);});
-		setItem(22, createPotionItem("Effect Invisibilitiy", Color.PURPLE, PotionEffectType.INVISIBILITY), (itemstack) -> {addPtionEffect(player, PotionEffectType.INVISIBILITY);});
+		setItem(4, createPotionItem("Effect Speed", Color.BLUE, PotionEffectType.SPEED), (itemstack) -> {addPotionEffect(player, PotionEffectType.SPEED);});
+		setItem(13, createPotionItem("Effect Jump Boost", Color.GREEN, PotionEffectType.JUMP), (itemstack) -> {addPotionEffect(player, PotionEffectType.JUMP);});
+		setItem(22, createPotionItem("Effect Invisibilitiy", Color.PURPLE, PotionEffectType.INVISIBILITY), (itemstack) -> {addPotionEffect(player, PotionEffectType.INVISIBILITY);});
 		setItem(31, createItem("Remove Effects", Material.GLASS_BOTTLE), (itemstack) -> {removeEffects(player);});
 		setItem(6, createItem("Weather Clear", Material.DOUBLE_PLANT), (itemstack) -> {player.getWorld().setStorm(false);});
 		setItem(15, createItem("Weather Rain", Material.WATER_BUCKET), (itemstack) -> {player.getWorld().setStorm(true); player.getWorld().setThundering(false);});
@@ -32,8 +32,8 @@ public class AdminMenu extends PlayerInventory {
 		setItem(17, createItem("Players", Material.REDSTONE_BLOCK), (itemstack) -> {new PlayersMenu(player).open();});
 	}
 	
-	private void addPtionEffect(Player player, PotionEffectType effect) {
-		player.addPotionEffect(new PotionEffect(effect, 12000, 2), true);
+	private void addPotionEffect(Player player, PotionEffectType effect) {
+		player.addPotionEffect(new PotionEffect(effect, 10000, 2));
 	}
 	
 	private void removeEffects(Player player) {

@@ -9,7 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import serversystem.handler.InventoryHandler;
 
 public class PlayerInventory {
@@ -68,8 +67,10 @@ public class PlayerInventory {
 	}
 	
 	public void onItemClicked(ItemStack itemstack) {
-		if(events.containsKey(itemstack)) {
-			events.get(itemstack).executeOnAction(itemstack);
+		for (ItemStack itemstacks : events.keySet()) {
+			if(itemstacks.hasItemMeta() && itemstack.hasItemMeta() && itemstacks.getItemMeta().getDisplayName().equals(itemstack.getItemMeta().getDisplayName())) {
+				events.get(itemstacks).executeOnAction(itemstacks);
+			}
 		}
 	}
 	

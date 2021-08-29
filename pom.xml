@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ServerSystemPluginGIRC</groupId>
   <artifactId>ServerSystemPluginGIRC</artifactId>
-  <version>1.8</version>
+  <version>1.9</version>
   <name>ServerSystemPluginGIRC</name>
   <packaging>jar</packaging>
   <build>

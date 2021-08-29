@@ -6,6 +6,7 @@
   <name>ServerSystemPluginGIRC</name>
   <packaging>jar</packaging>
   <build>
+    <finalName>ServerSystem</finalName>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>

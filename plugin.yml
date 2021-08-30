@@ -21,6 +21,10 @@ commands:
     description: Open the enderchest of a player
     usage: /<command> [<player>]
     permission: serversystem.command.enderchest
+  fly:
+    description: Allow the player to fly
+    usage: /<command>
+    permission: serversystem.command.fly
   inventory:
     description: Open the inventory of a player
     usage: /<command> [<player>]
@@ -69,6 +73,9 @@ permissions:
     default: op
   serversystem.command.enderchest:
     desciption: Open the enderchest of a player
+    default: op
+  serversystem.command.fly:
+    desciption: Allow the player to fly
     default: op
   serversystem.command.inventory:
     desciption: Open the inventory of a player

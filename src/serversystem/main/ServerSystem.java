@@ -9,6 +9,7 @@ import serversystem.commands.AdminCommand;
 import serversystem.commands.BackCommand;
 import serversystem.commands.BuildCommand;
 import serversystem.commands.EnderchestCommand;
+import serversystem.commands.FlyCommand;
 import serversystem.commands.InventoryCommand;
 import serversystem.commands.LobbyCommand;
 import serversystem.commands.PermissionCommand;
@@ -110,6 +111,7 @@ public class ServerSystem extends JavaPlugin{
 		getCommand("back").setExecutor(new BackCommand());
 		getCommand("build").setExecutor(new BuildCommand());
 		getCommand("enderchest").setExecutor(new EnderchestCommand());
+		getCommand("fly").setExecutor(new FlyCommand());
 		getCommand("inventory").setExecutor(new InventoryCommand());
 		getCommand("lobby").setExecutor(new LobbyCommand());
 		getCommand("permission").setExecutor(new PermissionCommand());

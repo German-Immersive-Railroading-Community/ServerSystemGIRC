@@ -36,6 +36,9 @@ commands:
   permission:
     description: Set the permissions of a player
     usage: /<command> [<player>] [<group>]
+  permissionreload:
+    description: Reloads all permissions for all players
+    usage: /<command>
   ping:
     description: Returns the connection delay between server and client
     usage: /<command>

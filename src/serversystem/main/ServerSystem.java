@@ -13,6 +13,7 @@ import serversystem.commands.FlyCommand;
 import serversystem.commands.InventoryCommand;
 import serversystem.commands.LobbyCommand;
 import serversystem.commands.PermissionCommand;
+import serversystem.commands.PermissionReloadComnmand;
 import serversystem.commands.PingCommand;
 import serversystem.commands.SpeedCommand;
 import serversystem.commands.VanishCommand;
@@ -63,13 +64,6 @@ public class ServerSystem extends JavaPlugin{
 		}
 		WorldGroupHandler.autoCreateWorldGroups();
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			new BukkitRunnable() {
-	            @Override
-	            public void run() {
-	            	PermissionHandler.loadPlayerPermissions(player);
-	            }
-	            
-	        }.runTaskLater(ServerSystem.getInstance(), 100);
 			TeamHandler.addRoleToPlayer(player);
 			if(Config.lobbyExists() && Config.getLobbyWorld() != null) {
 				player.teleport(Config.getLobbyWorld().getSpawnLocation());
@@ -79,6 +73,16 @@ public class ServerSystem extends JavaPlugin{
 		if(Config.lobbyExists() && Config.getLobbyWorld() != null) {
 			Config.getLobbyWorld().setMonsterSpawnLimit(0);
 		}
+		new BukkitRunnable() {
+            @Override
+            public void run() {
+            	for (Player player : Bukkit.getOnlinePlayers()) {
+					PermissionHandler.loadPlayerPermissions(player);
+					TeamHandler.addRoleToPlayer(player);
+				}
+            }
+            
+        }.runTaskLater(ServerSystem.getInstance(), 100);
 	}
 	
 	@Override
@@ -115,6 +119,7 @@ public class ServerSystem extends JavaPlugin{
 		getCommand("inventory").setExecutor(new InventoryCommand());
 		getCommand("lobby").setExecutor(new LobbyCommand());
 		getCommand("permission").setExecutor(new PermissionCommand());
+		getCommand("permissionreload").setExecutor(new PermissionReloadComnmand());
 		getCommand("ping").setExecutor(new PingCommand());
 		getCommand("speed").setExecutor(new SpeedCommand());
 		getCommand("vanish").setExecutor(new VanishCommand());

@@ -100,26 +100,30 @@ public class SaveConfig {
 	}
 	
     public static void loadInventory(Player player, WorldGroup worldgroup) {
-    	String configarmor = "WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Inventory.Armor";
-    	String configcontent = "WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Inventory.Content";
-    	player.getInventory().clear();
-    	ItemStack[] content;
-    	if(config.get(configarmor) != null) {
-    		content = new ItemStack[4];
-            for (int i = 0; i < 4; i++) {
-            	if(config.getItemStack(configarmor + "." + i) != null) {
-            		content[i] = config.getItemStack(configarmor + "." + i);
+    	if (doesPlayerExist(player, worldgroup)) {
+    		String configarmor = "WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Inventory.Armor";
+        	String configcontent = "WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Inventory.Content";
+        	player.getInventory().clear();
+        	ItemStack[] content;
+        	if(config.get(configarmor) != null) {
+        		content = new ItemStack[4];
+                for (int i = 0; i < 4; i++) {
+                	if(config.getItemStack(configarmor + "." + i) != null) {
+                		content[i] = config.getItemStack(configarmor + "." + i);
+                	}
             	}
+                player.getInventory().setArmorContents(content);
         	}
-            player.getInventory().setArmorContents(content);
-    	}
-    	
-    	if(config.get(configcontent) != null) {
-    		content = new ItemStack[41];
-            for (int i = 0; i < 41; i++) {
-        		content[i] = config.getItemStack(configcontent + "." + i);
+        	
+        	if(config.get(configcontent) != null) {
+        		content = new ItemStack[41];
+                for (int i = 0; i < 41; i++) {
+            		content[i] = config.getItemStack(configcontent + "." + i);
+            	}
+                player.getInventory().setContents(content);
         	}
-            player.getInventory().setContents(content);
+    	} else {
+    		saveInventory(player, worldgroup);
     	}
 	}
     
@@ -130,11 +134,11 @@ public class SaveConfig {
     }
     
     public static void loadXp(Player player, WorldGroup worldgroup) {
-    	if (config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Level") != null) {
+    	if (doesPlayerExist(player, worldgroup)) {
     		player.setLevel(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Level"));
-    	}
-    	if(config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience") != null) {
-    		player.setExp(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience"));
+        	player.setExp(config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Experience"));
+    	} else {
+    		saveXp(player, worldgroup);
     	}
     }
     
@@ -150,7 +154,7 @@ public class SaveConfig {
     }
     
     public static void loadGamemode(Player player, WorldGroup worldgroup) {
-    	if (config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode") != null) {
+    	if (doesPlayerExist(player, worldgroup)) {
     		switch (config.getInt("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId() + ".Gamemode")) {
         	case 0: player.setGameMode(GameMode.SURVIVAL); break;
         	case 1: player.setGameMode(GameMode.CREATIVE); break;
@@ -160,6 +164,7 @@ public class SaveConfig {
         	}
     	} else {
     		player.setGameMode(Config.getWorldGamemode(player.getWorld().getName()));
+    		saveGamemode(player, worldgroup);
     	}
     }
     
@@ -186,6 +191,10 @@ public class SaveConfig {
     public static boolean loadFlying(Player player, World world) {
     	String path = "Worlds." + world.getName() + "." + player.getUniqueId();
     	return config.getBoolean(path + ".Fly");
+    }
+    
+    public static boolean doesPlayerExist(Player player, WorldGroup worldgroup) {
+    	return config.get("WorldGroups." + worldgroup.getName() + "." + player.getUniqueId()) != null;
     }
 
     public static void saveLog(Player player, LogTypes logtypes, String message) {
